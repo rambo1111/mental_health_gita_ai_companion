@@ -138,6 +138,7 @@ src-tauri\target\release\gita-companion.exe
 ```
 
 MSI Installer: `src-tauri\target\release\bundle\msi\`
+
 NSIS Setup (.exe): `src-tauri\target\release\bundle\nsis\`
 
 Copy it into your deployment folder alongside everything else.
