@@ -58,6 +58,32 @@ export const LLM_META: Record<LlmKey, LlmMeta> = {
 };
 
 // ─────────────────────────────────────────────────────────────
+//  findLlmMeta — tolerant lookup used across components
+//
+//  The Rust parser sometimes emits keys like
+//  "LLM-6  (Chapter 6 · Dhyana / Mindfulness)" — longer than
+//  what LLM_META keys contain.  This helper does a prefix match
+//  so components always get human-readable names.
+// ─────────────────────────────────────────────────────────────
+
+export function findLlmMeta(key: string): LlmMeta | undefined {
+  const keys = Object.keys(LLM_META) as LlmKey[];
+  // 1. Exact match
+  const exact = keys.find((k) => k === key);
+  if (exact) return LLM_META[exact];
+  // 2. Prefix match — "LLM-6  (Chapter 6..." starts with "LLM-6  (Chapter 6)"
+  const prefix = keys.find((k) => key.startsWith(k));
+  if (prefix) return LLM_META[prefix];
+  // 3. Numeric prefix match — extract "LLM-6" and match
+  const numMatch = key.match(/LLM-(\d+)/);
+  if (numMatch) {
+    const found = keys.find((k) => k.startsWith(`LLM-${numMatch[1]}`));
+    if (found) return LLM_META[found];
+  }
+  return undefined;
+}
+
+// ─────────────────────────────────────────────────────────────
 //  Routing result
 // ─────────────────────────────────────────────────────────────
 
@@ -91,6 +117,8 @@ export interface Message {
   status: MessageStatus;
   routing?: RoutingResult;
   errorText?: string;
+  audioUrl?: string;
+  audioSynthesizing?: boolean; // true while voice_cloner.exe is running
 }
 
 export interface Conversation {

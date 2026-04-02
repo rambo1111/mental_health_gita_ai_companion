@@ -3,15 +3,18 @@ import type { ProcessStatus } from "@/types";
 
 // ─────────────────────────────────────────────────────────────
 //  StatusBar — bottom chrome bar
+//
+//  Removed: "Llama 3.2 1B + LoRA" technical badge.
+//  Shows:   simple status, Offline, Private.
 // ─────────────────────────────────────────────────────────────
 
 const STATUS_LABELS: Record<ProcessStatus, string> = {
-  idle:               "Idle",
-  initializing:       "Initializing...",
-  loading_embeddings: "Loading embeddings...",
-  loading_router:     "Loading router model...",
+  idle:               "Starting up...",
+  initializing:       "Starting up...",
+  loading_embeddings: "Loading...",
+  loading_router:     "Loading...",
   ready:              "Ready",
-  processing:         "Processing...",
+  processing:         "Thinking...",
   error:              "Error",
 };
 
@@ -25,21 +28,22 @@ function dotClass(s: ProcessStatus): string {
 
 export function StatusBar() {
   const { processStatus, processStatusMessage } = useChatStore();
-  const label = processStatusMessage || STATUS_LABELS[processStatus] || processStatus;
+  const label =
+    processStatusMessage || STATUS_LABELS[processStatus] || processStatus;
 
   return (
     <footer className="status-bar" role="status" aria-live="polite">
-      <div className={`status-dot ${dotClass(processStatus)}`} aria-hidden />
+      <div
+        className={`status-dot ${dotClass(processStatus)}`}
+        aria-hidden
+      />
       <span className="status-text">{label}</span>
 
       <div className="status-sep" aria-hidden />
       <span className="status-badge highlight">Offline</span>
 
       <div className="status-sep" aria-hidden />
-      <span className="status-badge">Llama 3.2 1B + LoRA</span>
-
-      <div className="status-sep" aria-hidden />
-      <span className="status-badge">Full Privacy</span>
+      <span className="status-badge">Private</span>
     </footer>
   );
 }

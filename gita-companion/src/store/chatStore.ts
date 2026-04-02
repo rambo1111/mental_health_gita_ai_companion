@@ -43,6 +43,12 @@ interface ChatState {
   // UI
   sidebarOpen: boolean;
 
+  // Audio / voice cloning
+  referenceVoicePath: string | null;
+  setReferenceVoicePath: (path: string | null) => void;
+  attachAudioToMessage: (id: string, audioUrl: string) => void;
+  setMessageAudioSynthesizing: (id: string, synthesizing: boolean) => void;
+
   // Selectors
   getActiveConversation: () => Conversation | null;
   getActiveMessages: () => Message[];
@@ -89,6 +95,32 @@ export const useChatStore = create<ChatState>((set, get) => ({
   streamingMessageId: null,
   streamLines: [],
   sidebarOpen: true,
+
+  // ── Audio ──────────────────────────────────────────────────
+
+  referenceVoicePath: null,
+
+  setReferenceVoicePath: (path) => set({ referenceVoicePath: path }),
+
+  attachAudioToMessage: (id, audioUrl) =>
+    set((s) => ({
+      conversations: s.conversations.map((c) => ({
+        ...c,
+        messages: c.messages.map((m) =>
+          m.id === id ? { ...m, audioUrl } : m
+        ),
+      })),
+    })),
+
+  setMessageAudioSynthesizing: (id, synthesizing) =>
+    set((s) => ({
+      conversations: s.conversations.map((c) => ({
+        ...c,
+        messages: c.messages.map((m) =>
+          m.id === id ? { ...m, audioSynthesizing: synthesizing } : m
+        ),
+      })),
+    })),
 
   // ── Selectors ──────────────────────────────────────────────
 
@@ -208,7 +240,9 @@ export const useChatStore = create<ChatState>((set, get) => ({
       conversations: s.conversations.map((c) => ({
         ...c,
         messages: c.messages.map((m) =>
-          m.id === id ? { ...m, routing, status: "generating" as MessageStatus } : m
+          m.id === id
+            ? { ...m, routing, status: "generating" as MessageStatus }
+            : m
         ),
       })),
     }));
@@ -220,7 +254,9 @@ export const useChatStore = create<ChatState>((set, get) => ({
       conversations: s.conversations.map((c) => ({
         ...c,
         messages: c.messages.map((m) =>
-          m.id === id ? { ...m, content, routing, status: "done" as MessageStatus } : m
+          m.id === id
+            ? { ...m, content, routing, status: "done" as MessageStatus }
+            : m
         ),
         updatedAt: Date.now(),
       })),
@@ -233,7 +269,9 @@ export const useChatStore = create<ChatState>((set, get) => ({
       conversations: s.conversations.map((c) => ({
         ...c,
         messages: c.messages.map((m) =>
-          m.id === id ? { ...m, status: "error" as MessageStatus, errorText } : m
+          m.id === id
+            ? { ...m, status: "error" as MessageStatus, errorText }
+            : m
         ),
       })),
     }));

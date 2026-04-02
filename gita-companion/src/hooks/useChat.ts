@@ -7,7 +7,10 @@ import type { AskResponse, StreamLineEvent } from "@/types";
 // ─────────────────────────────────────────────────────────────
 //  useChat — main chat logic
 //
-//  Exposes sendMessage and subscribes to stream-line events.
+//  Key voice-cloning design:
+//  - Text response arrives  → input is IMMEDIATELY re-enabled
+//  - Voice synthesis runs   → fire-and-forget, per-message state
+//  - User can keep chatting while audio is being prepared
 // ─────────────────────────────────────────────────────────────
 
 export function useChat() {
@@ -23,6 +26,8 @@ export function useChat() {
     setProcessStatus,
     newConversation,
     activeConversationId,
+    attachAudioToMessage,
+    setMessageAudioSynthesizing,
   } = useChatStore();
 
   const isProcessingRef = useRef(false);
@@ -72,12 +77,31 @@ export function useChat() {
           question: trimmed,
         });
 
+        // ── Text is ready: show it and re-enable input immediately ──
         finalizeAssistantMessage(
           assistantId,
           result.responseText,
           result.routing
         );
         setProcessStatus("ready", "Ready");
+
+        // ── Voice synthesis: fire-and-forget, never blocks the UI ──
+        const refVoice = useChatStore.getState().referenceVoicePath;
+        if (refVoice) {
+          setMessageAudioSynthesizing(assistantId, true);
+          invoke<string>("generate_voice", {
+            text: result.responseText,
+            refPath: refVoice,
+          })
+            .then((audioPath) => {
+              attachAudioToMessage(assistantId, audioPath);
+              setMessageAudioSynthesizing(assistantId, false);
+            })
+            .catch((err: unknown) => {
+              console.error("Voice generation failed:", err);
+              setMessageAudioSynthesizing(assistantId, false);
+            });
+        }
       } catch (e) {
         const errorText =
           typeof e === "string" ? e : "An unexpected error occurred.";
