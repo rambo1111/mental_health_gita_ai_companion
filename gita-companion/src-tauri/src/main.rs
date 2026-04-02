@@ -4,9 +4,9 @@
 mod commands;
 mod state;
 
-use tauri::Manager;
-use commands::{ask_question, check_system, init_process, kill_process};
+use commands::{ask_question, check_system, generate_voice, init_process, kill_process};
 use state::AppState;
+use tauri::Manager;
 
 // ─────────────────────────────────────────────────────────────
 //  main — configure and run the Tauri application
@@ -14,12 +14,14 @@ use state::AppState;
 
 fn main() {
     tauri::Builder::default()
+        .plugin(tauri_plugin_dialog::init())
         .manage(AppState::new())
         .invoke_handler(tauri::generate_handler![
             check_system,
             init_process,
             ask_question,
             kill_process,
+            generate_voice
         ])
         .on_window_event(|window, event| {
             // Kill the child process cleanly when the window is destroyed

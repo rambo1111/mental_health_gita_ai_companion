@@ -2,19 +2,19 @@
 //  commands/system.rs — check required files before starting
 // ─────────────────────────────────────────────────────────────
 
+use serde::Serialize;
 use std::collections::HashMap;
 use std::path::PathBuf;
-use serde::Serialize;
-use tauri::Manager;
 use tauri::AppHandle;
+use tauri::Manager;
 
 #[derive(Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct SystemStatus {
-    pub exe_found:        bool,
+    pub exe_found: bool,
     pub embeddings_found: bool,
-    pub adapters_found:   HashMap<String, bool>,
-    pub all_ready:        bool,
+    pub adapters_found: HashMap<String, bool>,
+    pub all_ready: bool,
 }
 
 /// Returns the directory that contains gita_ai.exe by checking
@@ -32,24 +32,20 @@ pub fn exe_dir(app: &AppHandle) -> PathBuf {
     let candidates: Vec<PathBuf> = vec![
         // 1. Tauri resource directory (correct in production)
         app.path().resource_dir().unwrap_or_default(),
-
         // 2. Directory of the running binary
         std::env::current_exe()
             .unwrap_or_default()
             .parent()
             .unwrap_or_else(|| std::path::Path::new("."))
             .to_path_buf(),
-
         // 3. Current working directory (gita-companion/ in dev)
         std::env::current_dir().unwrap_or_default(),
-
         // 4. Parent of cwd (the workspace root in dev, e.g. 9-3-26-2/)
         std::env::current_dir()
             .unwrap_or_default()
             .parent()
             .unwrap_or_else(|| std::path::Path::new("."))
             .to_path_buf(),
-
         // 5. Grandparent of cwd
         std::env::current_dir()
             .unwrap_or_default()
@@ -86,7 +82,7 @@ const ADAPTER_NAMES: &[&str] = &[
 pub fn check_system(app: AppHandle) -> SystemStatus {
     let base = exe_dir(&app);
 
-    let exe_found        = base.join(GITA_AI_EXE).exists();
+    let exe_found = base.join(GITA_AI_EXE).exists();
     let embeddings_found = base.join("router_embeddings.pkl").exists();
 
     let mut adapters_found = HashMap::new();
@@ -94,9 +90,7 @@ pub fn check_system(app: AppHandle) -> SystemStatus {
         adapters_found.insert((*name).to_string(), base.join(name).is_dir());
     }
 
-    let all_ready = exe_found
-        && embeddings_found
-        && adapters_found.values().all(|&v| v);
+    let all_ready = exe_found && embeddings_found && adapters_found.values().all(|&v| v);
 
     SystemStatus {
         exe_found,

@@ -6,7 +6,7 @@ use std::process::Child;
 use std::sync::Arc;
 use tokio::sync::{mpsc, Mutex};
 
-pub type LineSender   = mpsc::Sender<String>;
+pub type LineSender = mpsc::Sender<String>;
 pub type LineReceiver = mpsc::Receiver<String>;
 
 /// Handle to the running gita_ai.exe child process.
