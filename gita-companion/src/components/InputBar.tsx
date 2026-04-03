@@ -165,14 +165,14 @@ export function InputBar({ onSend }: Props) {
             width: "100%",
             padding: "8px 14px",
             marginBottom: 10,
-            border: "1px dashed var(--smoke, rgba(0,0,0,0.25))",
+            border: "1px dashed var(--smoke-dark, rgba(0,0,0,0.25))",
             background: "transparent",
             cursor: isReady && !isBusy ? "pointer" : "default",
-            color: "var(--fog, rgba(0,0,0,0.4))",
+            color: "var(--fog-dark, rgba(0,0,0,0.4))",
             fontFamily: "var(--font-mono)",
             fontSize: 11,
             letterSpacing: "0.04em",
-            opacity: isReady && !isBusy ? 1 : 0.4,
+            opacity: isReady && !isBusy ? 1 : 0.5,
             textAlign: "left",
           }}
           title="Upload a short audio clip of your loved one's voice"
