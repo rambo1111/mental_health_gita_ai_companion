@@ -238,12 +238,6 @@ Copy it into your deployment folder alongside everything else.
 - **Batchfile** — 4.9% (Build automation)
 
 ---
-## 📊 Language Composition
-
-![Top Languages](https://github-readme-stats.vercel.app/api/top-langs/?username=rambo1111&layout=pie)
----
-
----
 
 ## 🏛️ Architecture
 
