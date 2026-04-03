@@ -64,7 +64,7 @@ Run the installer. It installs `gita-companion.exe` on your machine.
 
 ### Step 2 — Download the AI Backend Files
 
-👉 **[Download extras_gita_ai.zip (~4.7 GB) from Google Drive](https://drive.google.com/file/d/1m1PQCNBJJiVMaMyp-KOryJKSfNvjgGbo/view?usp=sharing)**
+👉 **[Download extras_gita_ai.zip (~4.7 GB) from Google Drive](https://drive.google.com/file/d/11eUr8CWa9SDS8lVcA8Yw1X5okgxzl-lh/view?usp=sharing)**
 
 This zip contains everything the AI needs to run offline:
 
