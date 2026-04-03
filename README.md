@@ -89,7 +89,7 @@ Extract `extras_gita_ai.zip` anywhere you like. Then **copy `gita-companion.exe`
 
 Your folder should look exactly like this:
 
-![Correct folder layout](folder-layout.png)
+![Correct folder layout](folder_layout.png)
 
 > **Where is `gita-companion.exe` after installing?**  
 > Check `C:\Program Files\Gita Companion\` or wherever the installer placed it.
