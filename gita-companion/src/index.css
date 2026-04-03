@@ -307,16 +307,16 @@ body {
 
 .sidebar-footer-quote {
   font-family: var(--font-display);
-  font-size: 11px;
+  font-size: 14px;
   font-style: italic;
-  color: var(--fog);
+  color: var(--fog-dark);
   line-height: 1.6;
 }
 
 .sidebar-footer-attr {
   font-family: var(--font-mono);
   font-size: 9px;
-  color: var(--smoke);
+  color: var(--smoke-dark);
   letter-spacing: 0.08em;
   text-transform: uppercase;
 }
