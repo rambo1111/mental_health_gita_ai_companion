@@ -108,7 +108,7 @@ export function Sidebar() {
               padding: "var(--s-3) var(--s-2)",
               fontSize: 11,
               fontFamily: "var(--font-mono)",
-              color: "var(--fog)",
+              color: "var(--fog-dark)",
               lineHeight: 1.6,
             }}
           >
