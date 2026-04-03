@@ -69,7 +69,7 @@ Run the installer. It installs `gita-companion.exe` on your machine.
 This zip contains everything the AI needs to run offline:
 
 ```
-extras_gita_ai.zip
+extras_gita-companion.zip
 ├── hf_cache\              ← pre-downloaded model weights (~2 GB)
 ├── lora_adapters_LLM1\
 ├── lora_adapters_LLM2\
